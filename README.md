@@ -23,6 +23,19 @@ A repo-local starter for building Bronze, Silver, and Gold data layers with Micr
    sqlpackage /Version
    ```
 
+   If `sqlcmd` or `sqlpackage` is not recognized after installation, reload the
+   VS Code window and open a new terminal. To refresh the terminal that is
+   already open, run:
+
+   ```powershell
+   $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+   $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+   $env:Path = "$machinePath;$userPath;$env:Path"
+
+   sqlcmd --version
+   sqlpackage /Version
+   ```
+
 3. Build, deploy, configure, and test the local database:
 
    ```powershell

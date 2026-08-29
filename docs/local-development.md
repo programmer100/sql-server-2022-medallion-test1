@@ -43,6 +43,23 @@ sqlpackage /Version
 & .\scripts\Test-LocalSqlServer.ps1
 ```
 
+### Refreshing PATH in an older VS Code window
+
+VS Code terminals inherit their environment from the VS Code process. If VS
+Code was open while `sqlcmd` or `SqlPackage` was installed, even a new terminal
+can initially inherit the older PATH. The workspace settings add both installed
+tool locations to new terminals. Either run **Developer: Reload Window** and
+open a new terminal, or refresh the current terminal without restarting it:
+
+```powershell
+$machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+$userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+$env:Path = "$machinePath;$userPath;$env:Path"
+
+sqlcmd --version
+sqlpackage /Version
+```
+
 `Initialize-LocalSqlServer.ps1` is idempotent for the scaffold: it rebuilds and republishes the DACPAC without dropping objects that are absent from the project, applies the documented local settings, and runs the schema smoke test.
 
 ## Local-only settings
