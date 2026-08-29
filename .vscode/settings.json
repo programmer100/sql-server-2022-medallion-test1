@@ -12,5 +12,7 @@
   "powershell.powerShellAdditionalExePaths": {
     "PowerShell 7": "${env:LOCALAPPDATA}\\Microsoft\\WindowsApps\\pwsh.exe"
   },
-  "powershell.powerShellDefaultVersion": "PowerShell 7"
+  "powershell.powerShellDefaultVersion": "PowerShell 7",
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false
 }
