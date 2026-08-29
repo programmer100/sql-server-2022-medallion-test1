@@ -1,9 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.Build.Sql/2.2.0">
   <PropertyGroup>
     <Name>SqlServerMedallion</Name>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
     <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
-    <ProjectGuid>{00000000-0000-0000-0000-000000000000}</ProjectGuid>
+    <ProjectGuid>{11A04872-01D3-4B72-88FF-07C43483C54C}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <Build Remove="Pre-Deployment\PreDeployment.sql" />
