@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.Build.Sql/2.2.0">
+  <PropertyGroup>
+    <Name>SqlServerMedallion</Name>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Build Remove="Pre-Deployment\PreDeployment.sql" />
+    <Build Remove="Post-Deployment\PostDeployment.sql" />
+    <PreDeploy Include="Pre-Deployment\PreDeployment.sql" />
+    <PostDeploy Include="Post-Deployment\PostDeployment.sql" />
+  </ItemGroup>
+</Project>

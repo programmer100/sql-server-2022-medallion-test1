@@ -1,0 +1,13 @@
+{
+  "terminal.integrated.profiles.windows": {
+    "PowerShell 7": {
+      "path": "${env:LOCALAPPDATA}\\Microsoft\\WindowsApps\\pwsh.exe",
+      "icon": "terminal-powershell"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell 7",
+  "powershell.powerShellAdditionalExePaths": {
+    "PowerShell 7": "${env:LOCALAPPDATA}\\Microsoft\\WindowsApps\\pwsh.exe"
+  },
+  "powershell.powerShellDefaultVersion": "PowerShell 7"
+}

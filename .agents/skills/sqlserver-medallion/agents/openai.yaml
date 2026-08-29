@@ -1,0 +1,7 @@
+interface:
+  display_name: "SQL Server Medallion"
+  short_description: "Design and implement SQL Server medallion layers"
+  default_prompt: "Use $sqlserver-medallion to assess or implement this SQL Server 2022 medallion repository."
+
+policy:
+  allow_implicit_invocation: true

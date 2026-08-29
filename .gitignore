@@ -1,0 +1,25 @@
+# SQL database project build output
+**/bin/
+**/obj/
+*.dacpac
+*.dbmdl
+
+# Visual Studio and VS Code machine-local state
+.vs/
+*.user
+*.suo
+.vscode/settings.local.json
+
+# SQL tooling and local environment files
+*.publish.user.xml
+*.sqlproj.user
+.env
+.env.*
+!.env.example
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Installer backups are intentionally local
+.sqlserver-medallion/backups/

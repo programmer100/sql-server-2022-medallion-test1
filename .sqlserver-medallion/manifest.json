@@ -1,0 +1,22 @@
+{
+  "manifestVersion": 1,
+  "createdAt": "2026-08-29",
+  "targetPlatform": "Microsoft SQL Server 2022",
+  "upstream": {
+    "architectingData": {
+      "repository": "https://github.com/ancoleman/ai-design-components",
+      "path": "skills/architecting-data",
+      "ref": "d6b36cd8f6ecd0c886c5c12c316adb16014b40de"
+    },
+    "sqlExpert": {
+      "repository": "https://github.com/hmohamed01/SQL-Expert",
+      "path": "sql-expert",
+      "ref": "23dae0738ba6f7e70fc66d8df57cee9464cfd355"
+    }
+  },
+  "localSkill": "sqlserver-medallion",
+  "installRoots": [
+    ".agents/skills",
+    ".claude/skills"
+  ]
+}
