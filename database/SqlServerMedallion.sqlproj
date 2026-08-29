@@ -3,8 +3,8 @@
     <Name>SqlServerMedallion</Name>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
     <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <ProjectGuid>{00000000-0000-0000-0000-000000000000}</ProjectGuid>
   </PropertyGroup>
-
   <ItemGroup>
     <Build Remove="Pre-Deployment\PreDeployment.sql" />
     <Build Remove="Post-Deployment\PostDeployment.sql" />
