@@ -9,10 +9,7 @@
   "terminal.integrated.env.windows": {
     "PATH": "C:\\Program Files\\SqlCmd;${env:LOCALAPPDATA}\\Microsoft\\WinGet\\Packages\\Microsoft.SqlPackage_Microsoft.Winget.Source_8wekyb3d8bbwe;${env:PATH}"
   },
-  "powershell.powerShellAdditionalExePaths": {
-    "PowerShell 7": "${env:LOCALAPPDATA}\\Microsoft\\WindowsApps\\pwsh.exe"
-  },
-  "powershell.powerShellDefaultVersion": "PowerShell 7",
+  "powershell.powerShellDefaultVersion": "PowerShell (Store)",
   "workbench.editor.enablePreview": false,
   "workbench.editor.enablePreviewFromQuickOpen": false
 }
