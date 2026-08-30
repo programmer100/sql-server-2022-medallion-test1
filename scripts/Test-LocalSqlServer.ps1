@@ -13,7 +13,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
-$smokeTestPath = Join-Path $repoRoot 'tests\smoke\001_layer_schemas_exist.sql'
+$smokeTestDirectory = Join-Path $repoRoot 'tests\smoke'
 $sqlcmd = (Get-Command sqlcmd -ErrorAction SilentlyContinue).Source
 
 if (-not $sqlcmd -and (Test-Path -LiteralPath 'C:\Program Files\SqlCmd\sqlcmd.exe')) {
@@ -65,9 +65,17 @@ if ($LASTEXITCODE -ne 0) {
     throw "Local SQL Server environment test failed with exit code $LASTEXITCODE."
 }
 
-& $sqlcmd -S $Server -d $Database -E -C -b -i $smokeTestPath
-if ($LASTEXITCODE -ne 0) {
-    throw "Database smoke test failed with exit code $LASTEXITCODE."
+$smokeTests = @(Get-ChildItem -LiteralPath $smokeTestDirectory -Filter '*.sql' -File | Sort-Object -Property Name)
+if ($smokeTests.Count -eq 0) {
+    throw "No SQL smoke tests were found in $smokeTestDirectory."
+}
+
+foreach ($smokeTest in $smokeTests) {
+    Write-Host "Running $($smokeTest.Name)..."
+    & $sqlcmd -S $Server -d $Database -E -C -b -i $smokeTest.FullName
+    if ($LASTEXITCODE -ne 0) {
+        throw "Database smoke test $($smokeTest.Name) failed with exit code $LASTEXITCODE."
+    }
 }
 
 Write-Host 'Local SQL Server 2022 Medallion tests passed.' -ForegroundColor Green

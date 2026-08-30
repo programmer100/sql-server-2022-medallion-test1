@@ -60,7 +60,13 @@ sqlcmd --version
 sqlpackage /Version
 ```
 
-`Initialize-LocalSqlServer.ps1` is idempotent for the scaffold: it rebuilds and republishes the DACPAC without dropping objects that are absent from the project, applies the documented local settings, and runs the schema smoke test.
+`Initialize-LocalSqlServer.ps1` is idempotent for the scaffold: it rebuilds and republishes the DACPAC without dropping objects that are absent from the project, applies the documented local settings, and runs every ordered SQL test in `tests/smoke`.
+
+Because local publication uses `DropObjectsNotInSource=False`, an object removed
+from the project can remain in an existing local database. This protects local
+data from accidental drops but means the database can drift from the DACPAC.
+Use a disposable database or review a SqlPackage deployment report when exact
+schema equivalence matters.
 
 ## Local-only settings
 

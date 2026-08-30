@@ -5,7 +5,9 @@ A repo-local starter for building Bronze, Silver, and Gold data layers with Micr
 ## Included
 
 - An SDK-style SQL database project targeting the SQL Server 2022 (`Sql160`) schema provider.
-- `bronze`, `silver`, `gold`, and `audit` schemas with starter audit/control tables.
+- `bronze`, `silver`, `gold`, and `audit` schemas with run, checkpoint, quality, and lineage controls.
+- Layer-specific database roles and smoke tests that reject prohibited cross-layer dependencies.
+- A source-contract template that gates source-specific Bronze, Silver, and Gold implementation.
 - Repo-local `architecting-data`, `sql-expert`, and `sqlserver-medallion` skills for both Codex and Claude Code.
 - Layer, pipeline, testing, and architecture-documentation folders.
 - PowerShell 7 validation, build, local deployment, and smoke-test helpers.
@@ -62,3 +64,7 @@ A repo-local starter for building Bronze, Silver, and Gold data layers with Micr
 See `docs/local-development.md` for installed versions, VS Code connection settings, reproduction commands, and the boundary between local and production configuration.
 
 The scaffold intentionally contains no source-system tables or business model. Add those only after source contracts, grains, keys, history, refresh cadence, and data-quality rules are known.
+
+Start the first source design from `docs/templates/source-contract.md`. The audit
+control plane is described in `docs/architecture/medallion.md` and is ready to be
+used by a source-specific vertical slice without inventing source semantics.

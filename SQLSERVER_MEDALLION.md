@@ -82,3 +82,15 @@ safety, SARGability, security, observability, and missing tests. Do not edit.
 | Runs, quality, lineage, operations | `audit` | `database/Audit` | Cross-cutting |
 
 This starter uses schemas in one database. A move to separate databases should be an explicit architecture decision based on isolation, security, ownership, backup/recovery, deployment, and workload needs.
+
+## Implemented source-neutral controls
+
+The `audit` schema now contains run attempts, committed checkpoints, versioned
+data-quality results, object-level lineage, and procedures that keep successful
+target changes and checkpoint advancement in one transaction. Layer-specific
+roles and smoke tests enforce the intended Bronze-to-Silver-to-Gold dependency
+direction where SQL Server dependency metadata can observe it.
+
+Before adding the first source-specific object, copy
+`docs/templates/source-contract.md` and approve its source keys, capture and
+watermark semantics, replay/history behavior, quality policy, and target grain.

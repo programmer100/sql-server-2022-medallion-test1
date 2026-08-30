@@ -18,8 +18,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
 $buildScript = Join-Path $PSScriptRoot 'Build.ps1'
+$testScript = Join-Path $PSScriptRoot 'Test-LocalSqlServer.ps1'
 $dacpacPath = Join-Path $repoRoot 'database\bin\Release\SqlServerMedallion.dacpac'
-$smokeTestPath = Join-Path $repoRoot 'tests\smoke\001_layer_schemas_exist.sql'
 
 $sqlcmd = (Get-Command sqlcmd -ErrorAction SilentlyContinue).Source
 $sqlpackage = (Get-Command sqlpackage -ErrorAction SilentlyContinue).Source
@@ -87,11 +87,8 @@ if ($LASTEXITCODE -ne 0) {
     throw "Local SQL Server configuration failed with exit code $LASTEXITCODE."
 }
 
-Write-Host 'Running the live database smoke test...'
-& $sqlcmd -S $Server -d $Database -E -C -b -i $smokeTestPath
-if ($LASTEXITCODE -ne 0) {
-    throw "Database smoke test failed with exit code $LASTEXITCODE."
-}
+Write-Host 'Running the live database test suite...'
+& $testScript -Server $Server -Database $Database
 
 Write-Host "Local database $Database is ready on $Server." -ForegroundColor Green
 Write-Host "SQL Server max memory: $MaxServerMemoryMB MB; database recovery: SIMPLE."
