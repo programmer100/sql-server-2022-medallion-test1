@@ -30,6 +30,10 @@ GRANT EXECUTE ON SCHEMA::[bronze] TO [medallion_bronze_loader];
 
 GO
 
+GRANT SELECT, INSERT, DELETE ON SCHEMA::[bronze] TO [medallion_bronze_loader];
+
+GO
+
 GRANT EXECUTE ON SCHEMA::[audit] TO [medallion_silver_loader];
 
 GO

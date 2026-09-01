@@ -1,0 +1,4 @@
+txn_id,txn_date,customer_code,product_sku,quantity,unit_price,store_code,promo_code,notes
+1001,2026-08-30,CUST-001,SKU-001,2,19.9500,AB01,"PROMO,10","quoted comma and
+embedded newline"
+1002,not-a-date,CUST-002,SKU-002,1,5.0000,AB01,,"Bronze retains the invalid date as text"

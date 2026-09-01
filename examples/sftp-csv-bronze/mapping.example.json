@@ -1,0 +1,30 @@
+{
+  "$schema": "../../pipelines/bronze/contracts/csv-mapping.schema.json",
+  "schemaVersion": 1,
+  "name": "sample_pos_sales",
+  "version": "1.0.0",
+  "source": {
+    "delimiter": ",",
+    "quote": "\"",
+    "hasHeader": true,
+    "encoding": "utf-8",
+    "treatEmptyAsNull": false
+  },
+  "strictHeader": true,
+  "target": {
+    "schema": "bronze",
+    "table": "SampleSalesTransactionRaw",
+    "requireHeap": true
+  },
+  "columns": [
+    { "source": "txn_id", "target": "TxnId", "landingMaxLength": 4000, "businessType": "bigint", "businessMaxLength": null, "optional": false },
+    { "source": "txn_date", "target": "TxnDate", "landingMaxLength": 4000, "businessType": "date", "businessMaxLength": null, "optional": false },
+    { "source": "customer_code", "target": "CustomerCode", "landingMaxLength": 4000, "businessType": "varchar(20)", "businessMaxLength": 20, "optional": false },
+    { "source": "product_sku", "target": "ProductSku", "landingMaxLength": 4000, "businessType": "varchar(40)", "businessMaxLength": 40, "optional": false },
+    { "source": "quantity", "target": "Quantity", "landingMaxLength": 4000, "businessType": "int", "businessMaxLength": null, "optional": false },
+    { "source": "unit_price", "target": "UnitPriceCad", "landingMaxLength": 4000, "businessType": "decimal(19,4)", "businessMaxLength": null, "optional": false },
+    { "source": "store_code", "target": "StoreCode", "landingMaxLength": 4000, "businessType": "varchar(10)", "businessMaxLength": 10, "optional": false },
+    { "source": "promo_code", "target": "PromoCode", "landingMaxLength": 4000, "businessType": "varchar(20)", "businessMaxLength": 20, "optional": true },
+    { "source": "notes", "target": "Notes", "landingMaxLength": 4000, "businessType": "nvarchar(500)", "businessMaxLength": 500, "optional": true }
+  ]
+}

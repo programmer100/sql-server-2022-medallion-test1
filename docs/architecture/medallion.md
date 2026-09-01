@@ -21,6 +21,11 @@ gold    -- business-ready dimensions, facts, aggregates, views
 audit records runs, quality results, lineage, and operational state
 ```
 
+For file feeds, the original verified ZIP is Bronze file evidence outside the
+database. The extracted CSV is a protected work artifact, and a source-specific
+`bronze.*` heap retains source values plus logical-load, physical-attempt,
+source-record, source-file, and UTC ingestion lineage.
+
 ## Implemented control plane
 
 The repository implements source-neutral operational controls in `audit`; it
@@ -32,10 +37,31 @@ does not yet implement a source-specific data flow.
 | `audit.PipelineCheckpoint` | Stores only the last successfully committed source watermark for a pipeline/source/partition. |
 | `audit.DataQualityResult` | Records versioned quality rules, severity, threshold, outcome, and failure disposition. |
 | `audit.LineageEvent` | Records run-scoped object-level movement through allowed layer transitions. |
+| `audit.FileArtifact` | Records original archive identity, SFTP metadata, relative archive location, byte count, and SHA-256. |
+| `audit.FileLoad` | Records logical idempotency by CSV content, exact mapping, and Bronze target. |
+| `audit.FileLoadAttempt` | Records each physical bulk-copy attempt and its pipeline run. |
+| `audit.CsvRowReject` | Records structural CSV reject identity; raw fragments are opt-in. |
 | `audit.usp_StartPipelineRun` | Creates a validated run attempt and copies extraction boundaries from a replay parent when appropriate. |
 | `audit.usp_CompletePipelineRun` | Completes an active run and optionally advances its checkpoint in the same transaction. |
 | `audit.usp_RecordDataQualityResult` | Records a quality evaluation for an active run. |
 | `audit.usp_RecordLineageEvent` | Records an allowed lineage edge for an active run. |
+| `audit.usp_RegisterFileArtifact` | Idempotently registers original archive evidence. |
+| `audit.usp_StartFileLoadAttempt` | Starts or skips a logical file load and creates a physical attempt. |
+| `audit.usp_RecordCsvRowRejects` | Records validated structural rejects for an active attempt. |
+| `audit.usp_CompleteFileLoadAttempt` | Atomically completes the attempt, logical file load, and pipeline run. |
+
+### File retry contract
+
+`SqlBulkCopy` uses per-batch internal transactions. A network failure can leave
+earlier batches committed. `FileLoadId` therefore identifies the logical load,
+while `FileLoadAttemptId` identifies a physical attempt. Before every physical
+attempt, the loader deletes only Bronze rows with the logical `FileLoadId` and
+then restarts the CSV from the beginning. Successful content + mapping + target
+combinations are skipped. A stale `Started` attempt is never abandoned by
+assumption; an operator must verify the old process and opt into a time threshold.
+
+See ADR 0003 and `docs/operations/sftp-csv-bronze.md` for acquisition, security,
+mapping, performance, replay, and rollback details.
 
 `PipelineRun.SourceWatermark` is retained only to avoid a destructive migration
 for databases created from the initial scaffold. New pipelines must use
@@ -65,6 +91,9 @@ dependency metadata and therefore requires review.
 The project defines these least-privilege roles without assigning users:
 
 - `medallion_bronze_loader`: execute Bronze and audit procedures.
+- `medallion_bronze_loader` also has `SELECT`, `INSERT`, and `DELETE` on the
+  Bronze schema for direct bulk landing, reconciliation, and retry cleanup; it
+  has no inferred access to secrets or filesystem paths.
 - `medallion_silver_loader`: read Bronze and execute Silver and audit procedures.
 - `medallion_gold_loader`: read Silver and execute Gold and audit procedures.
 - `medallion_gold_reader`: read Gold only.

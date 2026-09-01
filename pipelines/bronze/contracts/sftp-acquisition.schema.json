@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/sqlserver-medallion/sftp-acquisition.schema.json",
+  "title": "SQL Server Medallion SFTP ZIP acquisition config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "feedName", "sftp", "acquisition"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "feedName": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$" },
+    "sftp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hostName",
+        "portNumber",
+        "remoteDirectory",
+        "fileMask",
+        "sshHostKeyFingerprint",
+        "authMode",
+        "credentialSecretName",
+        "minimumFileAgeSeconds",
+        "stabilityCheckSeconds"
+      ],
+      "properties": {
+        "hostName": { "type": "string", "minLength": 1 },
+        "portNumber": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "remoteDirectory": { "type": "string", "minLength": 1 },
+        "fileMask": { "type": "string", "minLength": 1 },
+        "sshHostKeyFingerprint": {
+          "type": "string",
+          "minLength": 1,
+          "not": { "enum": ["*", "acceptnew"] }
+        },
+        "authMode": { "enum": ["password", "privateKey"] },
+        "credentialSecretName": { "type": "string", "minLength": 1 },
+        "credentialVault": { "type": ["string", "null"] },
+        "privateKeyPath": { "type": ["string", "null"] },
+        "winScpAssemblyPath": { "type": ["string", "null"] },
+        "minimumFileAgeSeconds": { "type": "integer", "minimum": 0 },
+        "stabilityCheckSeconds": { "type": "integer", "minimum": 1, "maximum": 60 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "authMode": { "const": "privateKey" } } },
+          "then": { "required": ["privateKeyPath"] }
+        }
+      ]
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archiveRoot",
+        "workRoot",
+        "csvEntryMask",
+        "maxArchiveBytes",
+        "maxExpandedBytes",
+        "maxCompressionRatio",
+        "minimumFreeBytes"
+      ],
+      "properties": {
+        "archiveRoot": { "type": "string", "minLength": 1 },
+        "workRoot": { "type": "string", "minLength": 1 },
+        "csvEntryMask": { "type": "string", "minLength": 1 },
+        "maxArchiveBytes": { "type": "integer", "minimum": 1 },
+        "maxExpandedBytes": { "type": "integer", "minimum": 1 },
+        "maxCompressionRatio": { "type": "number", "exclusiveMinimum": 0 },
+        "minimumFreeBytes": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

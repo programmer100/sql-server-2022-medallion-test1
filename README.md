@@ -7,6 +7,8 @@ A repo-local starter for building Bronze, Silver, and Gold data layers with Micr
 - An SDK-style SQL database project targeting the SQL Server 2022 (`Sql160`) schema provider.
 - `bronze`, `silver`, `gold`, and `audit` schemas with run, checkpoint, quality, and lineage controls.
 - Layer-specific database roles and smoke tests that reject prohibited cross-layer dependencies.
+- Secure SFTP ZIP acquisition and a constant-memory, retry-safe CSV-to-Bronze
+  `SqlBulkCopy` pipeline with content hashes, schema validation, and attempt-level audit.
 - A source-contract template that gates source-specific Bronze, Silver, and Gold implementation.
 - Repo-local `architecting-data`, `sql-expert`, and `sqlserver-medallion` skills for both Codex and Claude Code.
 - Layer, pipeline, testing, and architecture-documentation folders.
@@ -60,6 +62,12 @@ A repo-local starter for building Bronze, Silver, and Gold data layers with Micr
    ```
 
 7. Read `SQLSERVER_MEDALLION.md` and begin with an assessment prompt before implementing source-specific objects.
+
+For large daily CSV files delivered as ZIP archives over SFTP, read
+`docs/operations/sftp-csv-bronze.md`. The implementation stores credentials in a
+PowerShell SecretManagement vault, pins the SSH host key, archives original ZIP
+bytes, safely extracts and hashes one CSV, and cleans partial batches before a
+new physical retry.
 
 See `docs/local-development.md` for installed versions, VS Code connection settings, reproduction commands, and the boundary between local and production configuration.
 

@@ -41,7 +41,17 @@ sqlpackage /Version
 
 & .\scripts\Initialize-LocalSqlServer.ps1
 & .\scripts\Test-LocalSqlServer.ps1
+
+# Offline CSV parser, ZIP archive, hash, and path-safety tests
+& .\tests\powershell\Test-BronzeFilePipeline.ps1
+
+# Live disposable-table bulk-copy and committed-partial-batch retry test
+& .\tests\integration\Test-CsvToSqlBulkLoad.ps1
 ```
+
+The integration test creates a uniquely named Bronze heap, seeds a failed
+one-row committed batch, verifies cleanup plus a new successful attempt, and
+removes only its own table and audit rows in `finally`.
 
 ### Refreshing PATH in an older VS Code window
 
@@ -91,3 +101,8 @@ winget install --id Microsoft.SQLServer.2022.Developer --exact --source winget
 ```
 
 The SQL Server bootstrap package can install the RTM engine. Apply Microsoft's latest SQL Server 2022 cumulative update before using the instance, then verify the live build with `SERVERPROPERTY('ProductVersion')`.
+
+WinSCP and SecretManagement are optional and required only for SFTP acquisition.
+Use the WinSCP automation package's .NET Standard assembly with PowerShell 7;
+follow `docs/operations/sftp-csv-bronze.md` rather than committing its binaries,
+credentials, or environment-specific acquisition config.

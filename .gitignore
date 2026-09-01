@@ -16,6 +16,9 @@
 .env
 .env.*
 !.env.example
+pipelines/bronze/config/*.local.json
+logs/
+tmp/
 
 # Operating-system files
 .DS_Store

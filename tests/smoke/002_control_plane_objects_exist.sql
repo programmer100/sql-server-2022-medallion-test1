@@ -12,10 +12,18 @@ WITH [RequiredObjects] AS
             ('U', N'audit', N'PipelineCheckpoint'),
             ('U', N'audit', N'DataQualityResult'),
             ('U', N'audit', N'LineageEvent'),
+            ('U', N'audit', N'FileArtifact'),
+            ('U', N'audit', N'FileLoad'),
+            ('U', N'audit', N'FileLoadAttempt'),
+            ('U', N'audit', N'CsvRowReject'),
             ('P', N'audit', N'usp_StartPipelineRun'),
             ('P', N'audit', N'usp_CompletePipelineRun'),
             ('P', N'audit', N'usp_RecordDataQualityResult'),
-            ('P', N'audit', N'usp_RecordLineageEvent')
+            ('P', N'audit', N'usp_RecordLineageEvent'),
+            ('P', N'audit', N'usp_RegisterFileArtifact'),
+            ('P', N'audit', N'usp_StartFileLoadAttempt'),
+            ('P', N'audit', N'usp_RecordCsvRowRejects'),
+            ('P', N'audit', N'usp_CompleteFileLoadAttempt')
     ) AS [Objects] ([ObjectType], [SchemaName], [ObjectName])
 )
 SELECT @MissingObjects = STRING_AGG(

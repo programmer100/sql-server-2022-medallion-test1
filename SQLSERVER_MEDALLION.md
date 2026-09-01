@@ -91,6 +91,12 @@ target changes and checkpoint advancement in one transaction. Layer-specific
 roles and smoke tests enforce the intended Bronze-to-Silver-to-Gold dependency
 direction where SQL Server dependency metadata can observe it.
 
+It also contains source-neutral file controls: immutable artifact metadata,
+logical file loads, physical load attempts, and structural CSV rejects. For a
+ZIP-over-SFTP source, use `docs/operations/sftp-csv-bronze.md` and the reusable
+PowerShell 7 components under `pipelines/bronze`. Keep original ZIP evidence,
+mapping/table validation, and cleanup-before-retry semantics intact.
+
 Before adding the first source-specific object, copy
 `docs/templates/source-contract.md` and approve its source keys, capture and
 watermark semantics, replay/history behavior, quality policy, and target grain.

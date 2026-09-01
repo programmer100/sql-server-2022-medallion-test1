@@ -1,0 +1,28 @@
+{
+  "$schema": "../../pipelines/bronze/contracts/sftp-acquisition.schema.json",
+  "schemaVersion": 1,
+  "feedName": "sample-pos-sales",
+  "sftp": {
+    "hostName": "sftp.example.com",
+    "portNumber": 22,
+    "remoteDirectory": "/outbound/sales",
+    "fileMask": "sales-*.zip",
+    "sshHostKeyFingerprint": "ssh-ed25519 255 SHA256:REPLACE_WITH_OUT_OF_BAND_VERIFIED_FINGERPRINT",
+    "authMode": "password",
+    "credentialSecretName": "sql-medallion-sample-pos-sftp",
+    "credentialVault": "LocalStore",
+    "privateKeyPath": null,
+    "winScpAssemblyPath": "C:\\Tools\\WinSCP-Automation\\netstandard2.0\\WinSCPnet.dll",
+    "minimumFileAgeSeconds": 120,
+    "stabilityCheckSeconds": 5
+  },
+  "acquisition": {
+    "archiveRoot": "D:\\SqlServerMedallion\\bronze-archive",
+    "workRoot": "D:\\SqlServerMedallion\\work",
+    "csvEntryMask": "*.csv",
+    "maxArchiveBytes": 8589934592,
+    "maxExpandedBytes": 34359738368,
+    "maxCompressionRatio": 100,
+    "minimumFreeBytes": 10737418240
+  }
+}

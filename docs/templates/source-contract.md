@@ -22,6 +22,10 @@ are approved.
 - Source platform and version:
 - Source object or endpoint:
 - Extraction interface and authentication method:
+- For SFTP: verified SSH host-key fingerprint owner and rotation process:
+- Credential vault and service identity (secret name only, never secret value):
+- Remote directory, file mask, minimum age, and stability interval:
+- ZIP entry contract, maximum archive/expanded size, and compression-ratio limit:
 - Source row/event grain:
 - Durable natural key:
 - Source change timestamp/version/LSN, if available:
@@ -56,6 +60,11 @@ are approved.
 - Append-only, snapshot, CDC-history, temporal, or current-plus-history strategy:
 - Invalid-input retention and disposition:
 - Replay and retention behavior:
+- Original artifact archive path convention, SHA-256, ACL/WORM, backup, and retention:
+- Extracted-work-file and JSONL-log cleanup/retention:
+- CSV encoding, delimiter, quote, required headers, and schema-drift policy:
+- Bronze `landingMaxLength` versus Silver `businessType`/`businessMaxLength`:
+- Logical `FileLoadId`, physical `FileLoadAttemptId`, batch size, and cleanup-before-retry rule:
 
 Bronze must preserve source values before business transformation. It may add
 technical metadata, hashes, and parsing diagnostics.
@@ -110,6 +119,11 @@ Leave this section unimplemented until a real consumer requirement exists.
 - Quarantine and load-failure thresholds
 - Repeated-run idempotency
 - Interrupted-run restart without checkpoint advancement
+- Partial `SqlBulkCopy` batch commit followed by full-file cleanup and a new attempt
+- Same CSV in different ZIP bytes and renamed-identical artifact handling
+- SFTP host-key mismatch, unstable remote file, byte-count mismatch, and credential-vault failure
+- ZIP path traversal, unexpected entry, expansion limit, compression ratio, and low disk space
+- Quoted delimiter, escaped quote, embedded newline, malformed field count, and unterminated quote
 - Watermark boundary ties and overlapping lookback
 - Late-arriving update
 - Source deletion or tombstone

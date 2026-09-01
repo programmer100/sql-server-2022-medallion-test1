@@ -47,6 +47,40 @@ Expose stable, business-oriented models for analytics and reporting.
 - Keep metric logic consistent and document slowly changing dimension behavior.
 - Optimize for consumer semantics without bypassing Silver validation.
 
+## Secure SFTP and CSV File Contract
+
+When a ZIP archive arrives over SFTP and expands to a large CSV:
+
+- Separate acquisition from SQL loading. Pin an out-of-band-verified SSH host
+  key and retrieve a `PSCredential` from a secret vault or runtime injection;
+  never put passwords, passphrases, connection URLs, or private-key content in
+  repository config.
+- Preserve the original verified ZIP as Bronze file evidence. Record remote
+  metadata, byte count, archive SHA-256, relative archive path, and acquisition
+  time. Safely validate ZIP paths, expected entries, expansion, compression
+  ratio, and free space before extracting.
+- Compute and retain both archive SHA-256 and extracted-content SHA-256. They
+  answer different questions because different ZIP bytes can contain identical
+  CSV content.
+- Stream quoted CSV records into `SqlBulkCopy`; do not use `Import-Csv` for large
+  files. Preserve quoted delimiters and embedded newlines and keep source values
+  untyped in Bronze.
+- Separate Bronze `landingMaxLength` from Silver `businessType` and
+  `businessMaxLength`. The landing capacity must allow dirty values to reach
+  explicit Silver validation instead of failing bulk copy prematurely.
+- Treat `FileLoadId` as the logical content/mapping/target load and
+  `FileLoadAttemptId` as a physical attempt. Because internal bulk-copy batches
+  can commit independently, delete only that logical load's partial Bronze rows
+  before restarting the complete file with a new attempt.
+- Validate mappings against source-specific Bronze heaps already declared in
+  the database project. Do not create or alter landing tables dynamically.
+- Keep structural reject fragments disabled by default because they may contain
+  sensitive source data. Business typing, validation, deduplication, and
+  conformance remain Bronze-to-Silver responsibilities.
+
+Use `docs/operations/sftp-csv-bronze.md`, ADR 0003, and the components under
+`pipelines/bronze` when this repository already provides them.
+
 ## SQL Server 2022 Defaults
 
 - The starter repository uses separate `bronze`, `silver`, `gold`, and `audit` schemas in one database. Recommend separate databases only when workload isolation, security, ownership, backup and recovery, or deployment boundaries justify them.
